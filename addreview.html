@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Review</title>
+</head>
+<body>
+    <a href="reviews.html">Просмотреть отзывы</a>
+    <input type="text" id="product-name" placeholder="Введите название товара">
+    <input type="text" id="product-review" placeholder="Введите отзыв">
+    <button id="save-btn">Сохранить отзыв</button>
+</body>
+<script>
+    let products = JSON.parse(localStorage.getItem('products')) || [];
+
+console.log(products);
+
+let arr = [];
+
+    
+document.getElementById('save-btn').addEventListener('click', () => {
+    let productName = document.getElementById('product-name').value;
+    let productReview = document.getElementById('product-review').value;
+   
+    let reviewedProduct = {};    
+    reviewedProduct.product = {title: productName};
+    reviewedProduct.reviews = [];       
+    
+
+    if (products.some(el => el.product.title === productName)) {
+        
+        let listedProduct = products.find(el => el.product.title === productName);
+        
+        if (productReview !=='') {
+            listedProduct.reviews.push(productReview);
+        }       
+       
+    } else  {
+        console.log('No such product')
+       reviewedProduct.reviews.push(productReview);
+        products.push(reviewedProduct);
+    }   
+      
+    localStorage.setItem('products', JSON.stringify(products));
+});
+    
+</script>
+</html>

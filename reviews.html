@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews</title>
+</head>
+<body>
+    <a href="addreview.html">Добавить отзыв</a>
+    <ul id="product-list">
+</body>
+<script>
+    
+  let parent = document.getElementById('product-list');
+
+  window.addEventListener('load', () => {    
+    let products = JSON.parse(localStorage.getItem('products'));
+
+products.forEach((product) => {  
+  
+  let productInfo = document.createElement('li');
+  let productDetails = document.createElement('details');
+  let productName = document.createElement('summary');
+  productName.innerText = product.product.title;
+  productDetails.appendChild(productName);
+  productInfo.appendChild(productDetails);
+  parent.appendChild(productInfo);
+  let reviews = product.reviews; 
+
+  reviews.forEach((review) => { 
+  let reviewLine = document.createElement('li')
+  reviewLine.classList.add('review-line')
+  let reviewText = document.createElement('p');
+   reviewText.innerText = review;
+  let delBtn = document.createElement('button');
+  delBtn.innerText = 'Удалить отзыв'
+  delBtn.classList.add('del-btn');
+  reviewLine.appendChild(reviewText);
+  reviewLine.appendChild(delBtn);
+  productDetails.appendChild(reviewLine);
+
+ 
+  document.querySelector('ul').onclick = function(e) {
+    const btn = e.target.closest('.del-btn');    
+    const reviewLine = btn.parentElement;    
+    const details = reviewLine.parentElement;     
+    const productToFind = details.querySelector('summary');    
+    const reviewToDelete = btn.previousSibling;  
+
+ const productObj = products.find(function(item) {
+   return item.product.title === productToFind.innerText;
+  })   
+
+    const productReviews = productObj.reviews;
+  
+  let itemToDelete = reviewToDelete.innerText;
+  let index = productReviews.indexOf(itemToDelete);
+  
+
+ if (index !== -1) {
+ productReviews.splice(index, 1)
+
+  }  
+
+  localStorage.setItem('products', JSON.stringify(products));
+
+  btn.parentElement.remove();
+    
+  } 
+    
+  })
+
+})  
+
+})
+  
+</script>
+</html>
